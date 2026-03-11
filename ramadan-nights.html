@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>العشر الأواخر — The Last 10 Nights of Ramadan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #080810;
+  --deep: #0b0b18;
+  --panel: #0f0f20;
+  --border: rgba(212,175,55,0.18);
+  --gold: #d4af37;
+  --gold-light: #f0d060;
+  --gold-dim: rgba(212,175,55,0.35);
+  --cream: #f5ead8;
+  --parchment: #e8d5b0;
+  --text: #c8b888;
+  --muted: #7a6a4a;
+  --star: #a0c8ff;
+  --qadr: #b89aff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  position: fixed; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, background 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  position: fixed; pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.15s ease, width 0.2s, height 0.2s;
+}
+
+/* Stars canvas */
+#stars-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  opacity: 0.6;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: rgba(8,8,16,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: 4px;
+  color: var(--gold); text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  color: var(--muted); font-size: 12px; letter-spacing: 3px;
+  text-decoration: none; text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 80px 20px 40px;
+  overflow: hidden;
+}
+
+.hero-ornament {
+  width: 200px; height: 200px;
+  margin: 0 auto 24px;
+  position: relative;
+  animation: rotate-slow 60s linear infinite;
+}
+.hero-ornament svg { width: 100%; height: 100%; }
+
+@keyframes rotate-slow { to { transform: rotate(360deg); } }
+
+.hero-arabic {
+  font-family: 'Amiri', serif;
+  font-size: clamp(42px, 8vw, 90px);
+  color: var(--gold-light);
+  line-height: 1.1;
+  margin-bottom: 8px;
+  text-shadow: 0 0 60px rgba(212,175,55,0.3);
+  animation: fadeUp 1.2s ease forwards;
+  opacity: 0;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 2.5vw, 20px);
+  letter-spacing: 8px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+  animation: fadeUp 1.2s 0.2s ease forwards; opacity: 0;
+}
+.hero-sub {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--text); max-width: 560px;
+  line-height: 1.7; font-style: italic;
+  margin-bottom: 48px;
+  animation: fadeUp 1.2s 0.4s ease forwards; opacity: 0;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold); padding: 14px 36px;
+  font-family: 'Cinzel', serif; font-size: 12px;
+  letter-spacing: 4px; text-transform: uppercase;
+  text-decoration: none; cursor: none;
+  transition: all 0.3s;
+  animation: fadeUp 1.2s 0.6s ease forwards; opacity: 0;
+}
+.hero-cta:hover {
+  background: var(--gold-dim);
+  box-shadow: 0 0 40px rgba(212,175,55,0.2);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-scroll {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; color: var(--muted); font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase;
+  animation: fadeUp 1.2s 1s ease forwards; opacity: 0;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scroll-pulse 2s infinite;
+}
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.1); }
+}
+
+/* SECTION COMMON */
+section { position: relative; z-index: 1; }
+.section-inner { max-width: 1100px; margin: 0 auto; padding: 100px 40px; }
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::before {
+  content: ''; display: block; width: 40px; height: 1px;
+  background: var(--gold-dim);
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 300; color: var(--cream);
+  line-height: 1.15; margin-bottom: 16px;
+}
+.section-title em { color: var(--gold); font-style: italic; }
+.section-desc {
+  font-size: 17px; color: var(--muted); line-height: 1.8;
+  max-width: 600px;
+}
+
+/* DIVIDER */
+.divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  position: relative; z-index: 1; margin: 0 auto;
+}
+.divider-ornament {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: var(--ink); padding: 0 16px;
+  color: var(--gold); font-size: 18px;
+}
+
+/* INTRO CARDS */
+.intro-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px; margin-top: 60px;
+}
+.intro-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 32px 28px;
+  transition: border-color 0.3s, transform 0.3s;
+  position: relative; overflow: hidden;
+}
+.intro-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.intro-card:hover { border-color: var(--gold-dim); transform: translateY(-4px); }
+.intro-card:hover::before { opacity: 1; }
+.card-icon { font-size: 32px; margin-bottom: 16px; }
+.card-title {
+  font-family: 'Cinzel', serif; font-size: 13px;
+  letter-spacing: 2px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.card-text { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* ROADMAP */
+#roadmap { background: linear-gradient(180deg, var(--ink) 0%, var(--deep) 50%, var(--ink) 100%); }
+
+.roadmap-timeline {
+  position: relative; margin-top: 70px;
+}
+.timeline-spine {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; background: linear-gradient(to bottom, transparent, var(--gold-dim) 10%, var(--gold-dim) 90%, transparent);
+  transform: translateX(-50%);
+}
+
+.night-item {
+  display: grid; grid-template-columns: 1fr 60px 1fr;
+  gap: 0; margin-bottom: 48px; align-items: start;
+}
+.night-item:nth-child(odd) .night-content { grid-column: 1; text-align: right; padding-right: 48px; }
+.night-item:nth-child(odd) .night-spacer { grid-column: 2; }
+.night-item:nth-child(odd) .night-empty { grid-column: 3; }
+.night-item:nth-child(even) .night-empty { grid-column: 1; }
+.night-item:nth-child(even) .night-spacer { grid-column: 2; }
+.night-item:nth-child(even) .night-content { grid-column: 3; text-align: left; padding-left: 48px; }
+
+.night-node {
+  width: 48px; height: 48px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+  background: var(--deep);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; color: var(--gold);
+  transition: all 0.3s; cursor: none;
+  position: relative; z-index: 2;
+}
+.night-node.odd-night {
+  border-color: var(--qadr);
+  box-shadow: 0 0 20px rgba(184,154,255,0.2);
+  color: var(--qadr);
+}
+.night-node:hover {
+  background: var(--gold-dim);
+  transform: scale(1.15);
+}
+.night-node.odd-night:hover {
+  background: rgba(184,154,255,0.2);
+  box-shadow: 0 0 40px rgba(184,154,255,0.4);
+}
+
+.night-content {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  transition: border-color 0.3s;
+  cursor: none;
+}
+.night-content:hover { border-color: var(--gold-dim); }
+.night-content.odd-content { border-color: rgba(184,154,255,0.2); }
+.night-content.odd-content:hover { border-color: rgba(184,154,255,0.5); box-shadow: 0 0 30px rgba(184,154,255,0.08); }
+
+.night-num {
+  font-family: 'Cinzel', serif; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 4px;
+}
+.night-num.qadr { color: var(--qadr); }
+.night-theme { font-size: 18px; color: var(--cream); margin-bottom: 6px; }
+.night-focus { font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
+.night-acts { list-style: none; }
+.night-acts li {
+  font-size: 13px; color: var(--muted);
+  padding: 3px 0; display: flex; align-items: flex-start; gap: 8px;
+}
+.night-item:nth-child(odd) .night-acts li { justify-content: flex-end; }
+.night-acts li::before {
+  content: '◆';
+  color: var(--gold-dim); font-size: 7px; margin-top: 4px; flex-shrink: 0;
+}
+.night-item:nth-child(odd) .night-acts li::before { order: 2; }
+
+/* LAYLATUL QADR INFO */
+#qadr { background: var(--deep); }
+.qadr-hero {
+  text-align: center; padding: 60px 20px 40px;
+  position: relative;
+}
+.qadr-hero-arabic {
+  font-family: 'Amiri', serif;
+  font-size: clamp(28px, 5vw, 52px);
+  color: var(--qadr);
+  line-height: 1.6;
+  text-shadow: 0 0 60px rgba(184,154,255,0.3);
+  margin-bottom: 20px;
+}
+.qadr-translation {
+  font-size: 15px; color: var(--muted);
+  font-style: italic; line-height: 1.7;
+  max-width: 700px; margin: 0 auto 40px;
+}
+
+.qadr-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px; background: var(--border); margin-top: 60px;
+}
+.qadr-stat {
+  background: var(--panel);
+  padding: 40px 30px; text-align: center;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; color: var(--qadr);
+  line-height: 1; margin-bottom: 8px;
+  font-weight: 300;
+}
+.stat-label {
+  font-family: 'Cinzel', serif; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--muted);
+}
+.stat-sub { font-size: 13px; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+.qadr-features {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px; margin-top: 50px;
+}
+.qadr-feature {
+  background: var(--panel);
+  border: 1px solid rgba(184,154,255,0.15);
+  padding: 32px;
+}
+.qadr-feature-icon { font-size: 28px; margin-bottom: 14px; }
+.qadr-feature-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--qadr);
+  margin-bottom: 10px;
+}
+.qadr-feature-text { font-size: 15px; color: var(--muted); line-height: 1.75; }
+
+/* HADITH SECTION */
+#hadiths { background: var(--ink); }
+.hadith-grid {
+  display: grid; gap: 28px; margin-top: 60px;
+}
+.hadith-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  padding: 36px 40px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.hadith-card:hover {
+  transform: translateX(6px);
+  box-shadow: -6px 0 30px rgba(212,175,55,0.08);
+}
+.hadith-arabic {
+  font-family: 'Amiri', serif;
+  font-size: clamp(18px, 3vw, 28px);
+  color: var(--gold-light); direction: rtl;
+  line-height: 1.9; margin-bottom: 16px;
+  text-align: right;
+}
+.hadith-text {
+  font-size: 17px; color: var(--cream);
+  line-height: 1.8; margin-bottom: 12px;
+  font-style: italic;
+}
+.hadith-source {
+  font-family: 'Cinzel', serif; font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold);
+}
+.hadith-num {
+  position: absolute; top: 20px; right: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; color: rgba(212,175,55,0.08);
+  font-weight: 300; line-height: 1;
+}
+
+/* HISTORY */
+#history { background: var(--deep); }
+.history-timeline { margin-top: 60px; }
+.history-item {
+  display: grid; grid-template-columns: 120px 1px 1fr;
+  gap: 0 32px; margin-bottom: 0;
+  position: relative;
+}
+.history-item::after {
+  content: '';
+  position: absolute; left: 120px; top: 24px; bottom: -1px;
+  width: 1px; background: var(--border);
+}
+.history-item:last-child::after { display: none; }
+.history-date {
+  text-align: right; padding: 20px 0 40px;
+  font-family: 'Cinzel', serif; font-size: 11px;
+  letter-spacing: 2px; color: var(--gold);
+  text-transform: uppercase;
+}
+.history-line { position: relative; }
+.history-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%; background: var(--gold);
+  position: absolute; top: 24px; left: 0;
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px rgba(212,175,55,0.4);
+}
+.history-content {
+  padding: 16px 0 40px;
+}
+.history-title {
+  font-size: 20px; color: var(--cream);
+  margin-bottom: 8px; font-weight: 400;
+}
+.history-text { font-size: 15px; color: var(--muted); line-height: 1.75; }
+
+/* SIGNS */
+#signs { background: var(--ink); }
+.signs-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px; margin-top: 60px;
+}
+.sign-card {
+  background: var(--panel);
+  border: 1px solid rgba(184,154,255,0.15);
+  padding: 30px 28px; text-align: center;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.sign-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(184,154,255,0.05) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.sign-card:hover { border-color: rgba(184,154,255,0.4); transform: translateY(-4px); }
+.sign-card:hover::after { opacity: 1; }
+.sign-icon { font-size: 40px; margin-bottom: 16px; }
+.sign-title {
+  font-family: 'Cinzel', serif; font-size: 12px;
+  letter-spacing: 2px; color: var(--qadr);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.sign-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.sign-source { font-size: 11px; color: rgba(184,154,255,0.4); margin-top: 10px; font-style: italic; }
+
+/* IBADAH GUIDE */
+#ibadah { background: var(--deep); }
+.ibadah-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border);
+  margin-top: 50px; overflow-x: auto;
+}
+.ibadah-tab {
+  padding: 12px 28px;
+  background: transparent; border: none;
+  color: var(--muted); font-family: 'Cinzel', serif;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  cursor: none; border-bottom: 2px solid transparent;
+  transition: all 0.3s; white-space: nowrap;
+}
+.ibadah-tab.active, .ibadah-tab:hover {
+  color: var(--gold); border-bottom-color: var(--gold);
+}
+.ibadah-panel { display: none; padding: 40px 0; }
+.ibadah-panel.active { display: block; }
+.ibadah-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.ibadah-item {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 24px; display: flex; gap: 16px; align-items: flex-start;
+}
+.ibadah-num {
+  width: 32px; height: 32px; border: 1px solid var(--gold-dim);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 15px;
+  color: var(--gold); flex-shrink: 0;
+}
+.ibadah-name { font-size: 15px; color: var(--cream); margin-bottom: 4px; }
+.ibadah-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* DUA SECTION */
+#duas { background: var(--ink); }
+.dua-list { display: grid; gap: 24px; margin-top: 60px; }
+.dua-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 36px;
+  text-align: center; transition: all 0.3s;
+}
+.dua-card:hover { border-color: var(--gold-dim); }
+.dua-arabic {
+  font-family: 'Amiri', serif;
+  font-size: clamp(22px, 4vw, 36px);
+  color: var(--gold-light); line-height: 1.9;
+  margin-bottom: 16px;
+}
+.dua-translit { font-size: 15px; color: var(--qadr); font-style: italic; margin-bottom: 12px; }
+.dua-meaning { font-size: 15px; color: var(--muted); line-height: 1.7; }
+.dua-occasion {
+  display: inline-block; margin-top: 16px;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold); font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 5px 14px;
+}
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 60px 40px;
+  text-align: center;
+}
+.footer-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 28px; color: var(--gold);
+  margin-bottom: 12px;
+}
+.footer-text { font-size: 14px; color: var(--muted); margin-bottom: 30px; }
+.footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+.footer-links a {
+  color: var(--muted); font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px;
+  text-decoration: none; text-transform: uppercase;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom {
+  margin-top: 40px; font-size: 12px; color: var(--muted);
+  border-top: 1px solid var(--border); padding-top: 24px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .section-inner { padding: 70px 20px; }
+  .timeline-spine { left: 24px; }
+  .night-item { grid-template-columns: 48px 1fr !important; }
+  .night-item .night-empty { display: none !important; }
+  .night-item:nth-child(odd) .night-content,
+  .night-item:nth-child(even) .night-content {
+    grid-column: 2 !important; text-align: left !important;
+    padding: 0 0 0 20px !important;
+  }
+  .night-item:nth-child(odd) .night-spacer,
+  .night-item:nth-child(even) .night-spacer { grid-column: 1 !important; }
+  .night-item:nth-child(odd) .night-acts li { justify-content: flex-start !important; }
+  .night-item:nth-child(odd) .night-acts li::before { order: 0 !important; }
+  .history-item { grid-template-columns: 80px 1px 1fr; gap: 0 16px; }
+  .history-item::after { left: 80px; }
+  .qadr-features { grid-template-columns: 1fr; }
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+  .hero-cta { cursor: pointer; }
+  .ibadah-tab { cursor: pointer; }
+}
+
+/* GEOMETRIC BG PATTERN */
+.geo-bg {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(212,175,55,0.03) 60px, rgba(212,175,55,0.03) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(212,175,55,0.03) 60px, rgba(212,175,55,0.03) 61px);
+  pointer-events: none;
+}
+
+/* GLOW EFFECTS */
+.glow-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; filter: blur(80px);
+  animation: orb-drift 15s ease-in-out infinite alternate;
+}
+@keyframes orb-drift {
+  from { transform: translate(0, 0); }
+  to { transform: translate(40px, -30px); }
+}
+
+/* PULSE ANIMATION FOR ODD NIGHTS */
+@keyframes qadr-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(184,154,255,0.2); }
+  50% { box-shadow: 0 0 30px rgba(184,154,255,0.5), 0 0 60px rgba(184,154,255,0.2); }
+}
+.night-node.odd-night { animation: qadr-pulse 3s ease-in-out infinite; }
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Stars -->
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">العشر الأواخر · Last 10 Nights</div>
+  <div class="nav-links">
+    <a href="#intro">Introduction</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#qadr">Laylat ul-Qadr</a>
+    <a href="#hadiths">Hadiths</a>
+    <a href="#history">History</a>
+    <a href="#duas">Duas</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="geo-bg"></div>
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(184,154,255,0.06);top:-100px;right:-100px;"></div>
+  <div class="glow-orb" style="width:300px;height:300px;background:rgba(212,175,55,0.05);bottom:100px;left:-50px;animation-delay:5s;"></div>
+
+  <div class="hero-ornament">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="95" stroke="rgba(212,175,55,0.2)" stroke-width="0.5"/>
+      <circle cx="100" cy="100" r="75" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/>
+      <circle cx="100" cy="100" r="55" stroke="rgba(212,175,55,0.25)" stroke-width="0.5"/>
+      <!-- 8-point star -->
+      <path d="M100 20 L108 80 L160 60 L120 100 L160 140 L108 120 L100 180 L92 120 L40 140 L80 100 L40 60 L92 80 Z"
+        stroke="rgba(212,175,55,0.4)" stroke-width="0.8" fill="none"/>
+      <!-- Inner geometric -->
+      <path d="M100 40 L114 86 L160 72 L126 100 L160 128 L114 114 L100 160 L86 114 L40 128 L74 100 L40 72 L86 86 Z"
+        stroke="rgba(212,175,55,0.25)" stroke-width="0.5" fill="none"/>
+      <!-- Center moon -->
+      <circle cx="100" cy="100" r="18" stroke="rgba(212,175,55,0.5)" stroke-width="0.8" fill="none"/>
+      <circle cx="107" cy="95" r="13" fill="rgba(8,8,16,0.9)" stroke="rgba(212,175,55,0.3)" stroke-width="0.5"/>
+      <!-- Dots at star points -->
+      <circle cx="100" cy="20" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="160" cy="60" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="180" cy="100" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="160" cy="140" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="100" cy="180" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="40" cy="140" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="20" cy="100" r="2" fill="rgba(212,175,55,0.6)"/>
+      <circle cx="40" cy="60" r="2" fill="rgba(212,175,55,0.6)"/>
+    </svg>
+  </div>
+
+  <div class="hero-arabic">العشر الأواخر</div>
+  <div class="hero-title">The Last Ten Nights of Ramadan</div>
+  <p class="hero-sub">
+    "Seek Laylat ul-Qadr in the odd nights of the last ten days of Ramadan."<br>
+    <span style="font-size:13px;color:var(--muted)">— Sahih al-Bukhari · Sahih Muslim</span>
+  </p>
+  <a href="#intro" class="hero-cta">Begin the Journey ↓</a>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="section-inner">
+    <div class="section-label">Introduction</div>
+    <h2 class="section-title">The Most <em>Sacred Nights</em><br>of the Islamic Year</h2>
+    <p class="section-desc">The last ten nights of Ramadan are unlike any other time. Within them hides a night worth more than a lifetime of worship. This is your guide.</p>
+
+    <div class="intro-grid">
+      <div class="intro-card reveal">
+        <div class="card-icon">🌙</div>
+        <div class="card-title">What Are They?</div>
+        <p class="card-text">The final 10 nights of Ramadan — beginning from the 21st night — are a period of intensified worship, reflection, and spiritual pursuit. The Prophet ﷺ would tighten his belt and devote himself entirely to worship during these nights.</p>
+      </div>
+      <div class="intro-card reveal" style="transition-delay:0.1s">
+        <div class="card-icon">⭐</div>
+        <div class="card-title">Laylat ul-Qadr</div>
+        <p class="card-text">Hidden within these 10 nights is Laylat ul-Qadr — the Night of Power. A single night of worship on Laylat ul-Qadr is equivalent to 83 years and 4 months of continuous worship. Allah conceals it so we worship every night fully.</p>
+      </div>
+      <div class="intro-card reveal" style="transition-delay:0.2s">
+        <div class="card-icon">📿</div>
+        <div class="card-title">The Prophet's Sunnah</div>
+        <p class="card-text">Aisha (RA) reported: "When the last ten days of Ramadan arrived, the Prophet ﷺ would stay up all night, wake his family, strive hard, and tighten his waist belt." — Sahih al-Bukhari #2024</p>
+      </div>
+      <div class="intro-card reveal" style="transition-delay:0.3s">
+        <div class="card-icon">🤲</div>
+        <div class="card-title">I'tikaf</div>
+        <p class="card-text">The Prophet ﷺ performed I'tikaf (spiritual seclusion in the mosque) during the last 10 nights every year until he passed away. It is a Sunnah Mu'akkadah — a confirmed practice of spiritual retreat and proximity to Allah.</p>
+      </div>
+      <div class="intro-card reveal" style="transition-delay:0.4s">
+        <div class="card-icon">📖</div>
+        <div class="card-title">The Quran's Descent</div>
+        <p class="card-text">The Quran was first revealed on Laylat ul-Qadr. Allah says: "Indeed, We sent it [the Quran] down during the Night of Decree." (97:1) This night marks the beginning of divine revelation to humanity.</p>
+      </div>
+      <div class="intro-card reveal" style="transition-delay:0.5s">
+        <div class="card-icon">🌅</div>
+        <div class="card-title">Angels Descend</div>
+        <p class="card-text">On Laylat ul-Qadr, Allah says: "The angels and the Spirit descend therein by permission of their Lord for every matter." (97:4) The number of angels descending exceeds the pebbles of the earth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="section-label">Night-by-Night Roadmap</div>
+    <h2 class="section-title">Your <em>10-Night</em> Journey</h2>
+    <p class="section-desc">Each night has a theme, a spiritual focus, and a set of recommended acts. Odd nights are marked as Laylat ul-Qadr candidates — worship them as if each is THE night.</p>
+
+    <div class="roadmap-timeline">
+      <div class="timeline-spine"></div>
+
+      <!-- Night 21 -->
+      <div class="night-item">
+        <div class="night-content reveal-left">
+          <div class="night-num">Night 21 · Even</div>
+          <div class="night-theme">🌿 Night of Tawbah</div>
+          <div class="night-focus">Repentance & Renewal</div>
+          <ul class="night-acts">
+            <li>Begin with a sincere istighfar session</li>
+            <li>Pray Isha & Taraweeh in congregation</li>
+            <li>Recite Surah Al-Mulk before sleep</li>
+            <li>Perform 2 raka'ah Tahajjud with Ayat al-Kursi</li>
+          </ul>
+        </div>
+        <div class="night-spacer"><div class="night-node" data-night="21">21</div></div>
+        <div class="night-empty"></div>
+      </div>
+
+      <!-- Night 22 -->
+      <div class="night-item">
+        <div class="night-empty"></div>
+        <div class="night-spacer"><div class="night-node" data-night="22">22</div></div>
+        <div class="night-content reveal-right">
+          <div class="night-num">Night 22 · Even</div>
+          <div class="night-theme">❤️ Night of Shukr</div>
+          <div class="night-focus">Gratitude & Reflection</div>
+          <ul class="night-acts">
+            <li>Write 100 blessings you are grateful for</li>
+            <li>Recite Alhamdulillah 1000 times</li>
+            <li>Give extra sadaqah — even a smile counts</li>
+            <li>Call a parent or elder and express love</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Night 23 -->
+      <div class="night-item">
+        <div class="night-content odd-content reveal-left">
+          <div class="night-num qadr">Night 23 · ⭐ Odd — Laylat ul-Qadr Candidate</div>
+          <div class="night-theme">✨ Night of Revelation</div>
+          <div class="night-focus">The Quran Descended — Night of 1000 Months</div>
+          <ul class="night-acts">
+            <li>Complete Taraweeh — every single raka'ah</li>
+            <li>Read 1 Juz with tafsir & contemplation</li>
+            <li>Perform I'tikaf if possible</li>
+            <li>Pray Tahajjud until Fajr with dua list</li>
+          </ul>
+        </div>
+        <div class="night-spacer"><div class="night-node odd-night" data-night="23">23</div></div>
+        <div class="night-empty"></div>
+      </div>
+
+      <!-- Night 24 -->
+      <div class="night-item">
+        <div class="night-empty"></div>
+        <div class="night-spacer"><div class="night-node" data-night="24">24</div></div>
+        <div class="night-content reveal-right">
+          <div class="night-num">Night 24 · Even</div>
+          <div class="night-theme">🌙 Night of Family</div>
+          <div class="night-focus">Silat ur-Rahim — Mending Bonds</div>
+          <ul class="night-acts">
+            <li>Reconcile with anyone you have conflict with</li>
+            <li>Pray for all deceased family members</li>
+            <li>Cook and share food with neighbors</li>
+            <li>Recite Surah Yusuf — forgiveness & family</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Night 25 -->
+      <div class="night-item">
+        <div class="night-content odd-content reveal-left">
+          <div class="night-num qadr">Night 25 · ⭐ Odd — Laylat ul-Qadr Candidate</div>
+          <div class="night-theme">💎 Night of the Quran</div>
+          <div class="night-focus">Recitation, Reflection & Transformation</div>
+          <ul class="night-acts">
+            <li>Read Quran with tafsir for at least 1 hour</li>
+            <li>Memorize or review a new ayah</li>
+            <li>Reflect: which ayah speaks to your struggle?</li>
+            <li>Pray long raka'ahs with extended recitation</li>
+          </ul>
+        </div>
+        <div class="night-spacer"><div class="night-node odd-night" data-night="25">25</div></div>
+        <div class="night-empty"></div>
+      </div>
+
+      <!-- Night 26 -->
+      <div class="night-item">
+        <div class="night-empty"></div>
+        <div class="night-spacer"><div class="night-node" data-night="26">26</div></div>
+        <div class="night-content reveal-right">
+          <div class="night-num">Night 26 · Even</div>
+          <div class="night-theme">🔮 Night of the Heart</div>
+          <div class="night-focus">Tazkiyat un-Nafs — Purifying the Inner Self</div>
+          <ul class="night-acts">
+            <li>30 mins of silent muraqabah (self-accounting)</li>
+            <li>Recite Surah Al-Hashr (59:22-24) 100x</li>
+            <li>Give a secret charity no one knows about</li>
+            <li>Dua: "Ya Muqallibal Quloob thabbit qalbee"</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Night 27 -->
+      <div class="night-item">
+        <div class="night-content odd-content reveal-left" style="border-color: rgba(212,175,55,0.4) !important;">
+          <div class="night-num" style="color:var(--gold-light)">Night 27 · ⭐ THE Greatest Candidate</div>
+          <div class="night-theme" style="font-size:20px">👑 The Most Sought Night</div>
+          <div class="night-focus" style="color:var(--gold)">Most Scholars: This Is THE Night — Go All In</div>
+          <ul class="night-acts">
+            <li>Perform full ghusl before Maghrib</li>
+            <li>Pray all nawafil from Maghrib to Fajr</li>
+            <li>Recite the Qadr dua thousands of times</li>
+            <li>Make the most sincere duas of your life</li>
+            <li>Wake every member of your household</li>
+          </ul>
+        </div>
+        <div class="night-spacer"><div class="night-node odd-night" style="border-color:var(--gold);color:var(--gold);box-shadow:0 0 30px rgba(212,175,55,0.4);" data-night="27">27</div></div>
+        <div class="night-empty"></div>
+      </div>
+
+      <!-- Night 28 -->
+      <div class="night-item">
+        <div class="night-empty"></div>
+        <div class="night-spacer"><div class="night-node" data-night="28">28</div></div>
+        <div class="night-content reveal-right">
+          <div class="night-num">Night 28 · Even</div>
+          <div class="night-theme">🌱 Night of Sadaqah</div>
+          <div class="night-focus">Generosity, Zakat & Purification of Wealth</div>
+          <ul class="night-acts">
+            <li>Calculate and pay Zakat ul-Fitr</li>
+            <li>Sponsor an orphan or widow for the year</li>
+            <li>Give anonymously to someone in need</li>
+            <li>Recite Surah Al-Waqiah for barakah in rizq</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Night 29 -->
+      <div class="night-item">
+        <div class="night-content odd-content reveal-left">
+          <div class="night-num qadr">Night 29 · ⭐ Odd — Final Laylat ul-Qadr Candidate</div>
+          <div class="night-theme">🔥 Night of Last Chances</div>
+          <div class="night-focus">Do Not Let Regret Be Your Eid Companion</div>
+          <ul class="night-acts">
+            <li>Pray Witr with Qunoot — most heartfelt ever</li>
+            <li>Recite Istighfar 1000 times before Fajr</li>
+            <li>Write down your duas — commit to them</li>
+            <li>Make a pledge to Allah for post-Ramadan life</li>
+          </ul>
+        </div>
+        <div class="night-spacer"><div class="night-node odd-night" data-night="29">29</div></div>
+        <div class="night-empty"></div>
+      </div>
+
+      <!-- Night 30 -->
+      <div class="night-item">
+        <div class="night-empty"></div>
+        <div class="night-spacer"><div class="night-node" style="border-color:rgba(160,200,255,0.4);color:#a0c8ff;" data-night="30">30</div></div>
+        <div class="night-content reveal-right" style="border-color:rgba(160,200,255,0.2);">
+          <div class="night-num" style="color:#a0c8ff">Night 30 · The Farewell</div>
+          <div class="night-theme">🌅 Wida' — Night of Farewell</div>
+          <div class="night-focus">Ramadan Departs — Carry Its Light Forward</div>
+          <ul class="night-acts">
+            <li>Last Tahajjud of Ramadan — pray with tears</li>
+            <li>Dua: "O Allah, accept from us"</li>
+            <li>Give final sadaqah before Eid Salah</li>
+            <li>Commit to fasting 6 days of Shawwal</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- LAYLAT UL QADR -->
+<section id="qadr">
+  <div class="section-inner">
+    <div class="section-label">Laylat ul-Qadr</div>
+    <h2 class="section-title">The Night of <em>Power & Decree</em></h2>
+
+    <div class="qadr-hero reveal">
+      <div class="qadr-hero-arabic">
+        إِنَّا أَنزَلْنَاهُ فِي لَيْلَةِ الْقَدْرِ ۝ وَمَا أَدْرَاكَ مَا لَيْلَةُ الْقَدْرِ ۝ لَيْلَةُ الْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ ۝ تَنَزَّلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ ۝ سَلَامٌ هِيَ حَتَّىٰ مَطْلَعِ الْفَجْرِ
+      </div>
+      <p class="qadr-translation">
+        "Indeed, We sent it [the Quran] down during the Night of Decree. And what can make you know what is the Night of Decree? The Night of Decree is better than a thousand months. The angels and the Spirit descend therein by permission of their Lord for every matter. Peace it is until the emergence of dawn."
+        <br><strong style="color:var(--gold)">— Surah Al-Qadr (97:1–5)</strong>
+      </p>
+    </div>
+
+    <div class="qadr-stats reveal">
+      <div class="qadr-stat">
+        <div class="stat-num">1,000</div>
+        <div class="stat-label">Months of Worship</div>
+        <div class="stat-sub">One night equals 83 years & 4 months</div>
+      </div>
+      <div class="qadr-stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Verses of Surah Al-Qadr</div>
+        <div class="stat-sub">An entire surah revealed in its honor</div>
+      </div>
+      <div class="qadr-stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Angels Descending</div>
+        <div class="stat-sub">More than the pebbles of the earth</div>
+      </div>
+      <div class="qadr-stat">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Hidden Night</div>
+        <div class="stat-sub">Concealed to maximize our worship</div>
+      </div>
+    </div>
+
+    <div class="qadr-features reveal">
+      <div class="qadr-feature">
+        <div class="qadr-feature-icon">📜</div>
+        <div class="qadr-feature-title">Why Was It Hidden?</div>
+        <p class="qadr-feature-text">The wisdom of concealing Laylat ul-Qadr is profound. Had Allah revealed its exact date, Muslims might worship intensely only on that one night and neglect the others. By hiding it, Allah ensures that the believer strives throughout all 10 nights, or even all 30 nights of Ramadan. Ibn Rajab al-Hanbali wrote: "It was hidden so that the servant might exert effort on all the nights and so that his relationship with Allah across many nights becomes beloved."</p>
+      </div>
+      <div class="qadr-feature">
+        <div class="qadr-feature-icon">🌌</div>
+        <div class="qadr-feature-title">The Night of Decree</div>
+        <p class="qadr-feature-text">Al-Qadr means both "power" and "decree." On this night, the annual decrees for each person — their lifespan, provision, events of the coming year — are handed to the angels for execution. Allah says in Surah Ad-Dukhan (44:3-4): "We sent it down on a blessed night... On that night every wise matter is made distinct." Worshipping Allah on this night means you are present at the moment your year is written.</p>
+      </div>
+      <div class="qadr-feature">
+        <div class="qadr-feature-icon">🕊️</div>
+        <div class="qadr-feature-title">Peace Until Dawn</div>
+        <p class="qadr-feature-text">Allah describes Laylat ul-Qadr as "Salaam" — Peace — "until the emergence of dawn." The entirety of the night is an unbroken peace. Iblis (Satan) is chained and cannot harm. The angels greet every worshipper. Many believers report an unusual tranquility, ease of worship, and a sweetness in du'a during this night that they have never felt before or since.</p>
+      </div>
+      <div class="qadr-feature">
+        <div class="qadr-feature-icon">🕌</div>
+        <div class="qadr-feature-title">The Quran's Birth Night</div>
+        <p class="qadr-feature-text">The first revelation of the Quran came to Prophet Muhammad ﷺ on Laylat ul-Qadr in the Cave of Hira. Jibreel (AS) appeared and revealed the first verses of Surah Al-Alaq: "Read in the name of your Lord who created..." (96:1). This night is therefore the spiritual birthday of divine guidance for all of humanity — the night Allah's word entered the world through His final Prophet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- HADITHS -->
+<section id="hadiths">
+  <div class="section-inner">
+    <div class="section-label">Prophetic Traditions</div>
+    <h2 class="section-title">Hadiths on <em>Laylat ul-Qadr</em></h2>
+    <p class="section-desc">The Prophet Muhammad ﷺ spoke extensively about the last ten nights. These are the authentic narrations that guide our worship.</p>
+
+    <div class="hadith-grid">
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">01</div>
+        <div class="hadith-arabic">مَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ</div>
+        <p class="hadith-text">"Whoever stands in prayer on Laylat ul-Qadr with faith and seeking reward, his previous sins will be forgiven."</p>
+        <div class="hadith-source">Sahih al-Bukhari #1901 · Sahih Muslim #760</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">02</div>
+        <div class="hadith-arabic">تَحَرَّوْا لَيْلَةَ الْقَدْرِ فِي الْوِتْرِ مِنَ الْعَشْرِ الأَوَاخِرِ مِنْ رَمَضَانَ</div>
+        <p class="hadith-text">"Seek Laylat ul-Qadr in the odd nights of the last ten days of Ramadan."</p>
+        <div class="hadith-source">Sahih al-Bukhari #2017</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">03</div>
+        <div class="hadith-arabic">كَانَ النَّبِيُّ ﷺ إِذَا دَخَلَ الْعَشْرُ شَدَّ مِئْزَرَهُ، وَأَحْيَا لَيْلَهُ، وَأَيْقَظَ أَهْلَهُ</div>
+        <p class="hadith-text">"When the last ten days of Ramadan began, the Prophet ﷺ would tighten his waist belt, stay up all night in worship, and wake his family."</p>
+        <div class="hadith-source">Sahih al-Bukhari #2024 · Narrated by Aisha (RA)</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">04</div>
+        <p class="hadith-text">"Aisha (RA) asked: 'O Messenger of Allah, if I know which night is Laylat ul-Qadr, what should I say?' He replied: 'Say: Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni — O Allah, You are Pardoning and You love to pardon, so pardon me.'"</p>
+        <div class="hadith-source">Sunan al-Tirmidhi #3513 · Sahih Ibn Majah #3850</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">05</div>
+        <div class="hadith-arabic">إِنَّ هَذَا الشَّهْرَ قَدْ حَضَرَكُمْ، وَفِيهِ لَيْلَةٌ خَيْرٌ مِنْ أَلْفِ شَهْرٍ، مَنْ حُرِمَهَا فَقَدْ حُرِمَ الْخَيْرَ كُلَّهُ</div>
+        <p class="hadith-text">"This month has come to you, and in it is a night that is better than a thousand months. Whoever is deprived of it has been deprived of all good."</p>
+        <div class="hadith-source">Sunan Ibn Majah #1644 · Authenticated by al-Albani</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">06</div>
+        <p class="hadith-text">"Aisha (RA) reported: 'The Messenger of Allah ﷺ used to exert himself in the last ten nights of Ramadan more than he would at any other time.'"</p>
+        <div class="hadith-source">Sahih Muslim #1175 · Narrated by Aisha (RA)</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">07</div>
+        <p class="hadith-text">"The Prophet ﷺ said: 'Look for Laylat ul-Qadr in the last ten nights of Ramadan,' then he pointed with his hand indicating 9, 7, and 5 [nights remaining]."</p>
+        <div class="hadith-source">Sahih al-Bukhari #2021</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">08</div>
+        <p class="hadith-text">"Ubadah ibn al-Samit (RA) narrated that the Prophet ﷺ came out to inform them about Laylat ul-Qadr, but two men were quarreling, so he said: 'I came out to inform you about Laylat ul-Qadr, but because of the quarreling between so-and-so, its knowledge was raised. Perhaps that is better for you. Look for it in the 9th, 7th, and 5th [remaining nights].'"</p>
+        <div class="hadith-source">Sahih al-Bukhari #2023</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">09</div>
+        <p class="hadith-text">"The Prophet ﷺ performed I'tikaf during the last ten nights of Ramadan, and said: 'Seek Laylat ul-Qadr in the last ten days of Ramadan.' He continued performing I'tikaf every year until he died, and his wives continued doing it after him."</p>
+        <div class="hadith-source">Sahih al-Bukhari #2026 · Sahih Muslim #1172</div>
+      </div>
+
+      <div class="hadith-card reveal">
+        <div class="hadith-num">10</div>
+        <div class="hadith-arabic">لَيْلَةُ الْقَدْرِ لَيْلَةٌ سَمِحَةٌ طَلِقَةٌ، لَا حَارَّةٌ وَلَا بَارِدَةٌ</div>
+        <p class="hadith-text">"Laylat ul-Qadr is a calm, pleasant night — neither hot nor cold — and the sun rises the following morning weak and red."</p>
+        <div class="hadith-source">Sahih Ibn Khuzaimah #2049 · Ibn Hibban</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="section-inner">
+    <div class="section-label">Sacred History</div>
+    <h2 class="section-title">The History of <em>Laylat ul-Qadr</em></h2>
+    <p class="section-desc">From the first revelation to the practice of the companions, the story of this blessed night spans centuries.</p>
+
+    <div class="history-timeline reveal">
+
+      <div class="history-item">
+        <div class="history-date">610 CE<br>~13 BH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">The First Revelation — Cave of Hira</div>
+          <p class="history-text">It was on Laylat ul-Qadr in the month of Ramadan that Angel Jibreel (AS) first appeared to Muhammad ﷺ in the Cave of Hira and revealed the opening verses of Surah Al-Alaq: "Read! In the name of your Lord who created..." The Prophet ﷺ was 40 years old. This night marks the beginning of prophethood and the descent of the final divine message to humanity. The Prophet ﷺ returned trembling to Khadijah (RA), who wrapped him and comforted him. He described the encounter as the most overwhelming experience of his life.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">610–632 CE</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">23 Years of Revelation</div>
+          <p class="history-text">While the first revelation came on Laylat ul-Qadr, the Quran continued to be revealed over 23 years in stages — responding to events, guiding the community, and building the moral and legal framework of Islam. But every Ramadan, the Prophet ﷺ would review the entire Quran with Jibreel (AS) in what is known as the "Ardat al-Akhira" (final review). In his last Ramadan, Jibreel reviewed the Quran with him twice.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">~2 AH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">Surah Al-Qadr Revealed</div>
+          <p class="history-text">Allah revealed Surah Al-Qadr (Chapter 97) — an entire chapter of the Quran dedicated to honoring and describing this blessed night. The Surah declares it "better than a thousand months," describes the descent of the angels, and ends with the declaration that it is "peace until the emergence of dawn." This was Allah's own tribute to the night on which His Book first descended.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">~2–10 AH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">The Prophet's I'tikaf Practice</div>
+          <p class="history-text">After the migration to Medina and the establishment of the Islamic calendar with Ramadan fasting, the Prophet ﷺ began performing I'tikaf (spiritual seclusion in the mosque) during the last 10 nights of Ramadan every single year. Aisha (RA) reported that he never abandoned this practice until his death. He would instruct his wives to perform I'tikaf, and after his passing, they continued it as his living legacy. His I'tikaf was a complete withdrawal from worldly affairs — no business transactions, no unnecessary speech, solely devoted to worship, recitation, and remembrance.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">~7 AH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">The Night Its Date Was Hidden</div>
+          <p class="history-text">The Prophet ﷺ narrated in Sahih al-Bukhari that he came out to inform the companions about the exact date of Laylat ul-Qadr, but he witnessed two men quarreling. As a result, the knowledge of its precise date was taken from him. He told the companions: "Its knowledge was raised. Perhaps that is better for you." This is one of the most profound pieces of wisdom in Islamic history — a quarrel between believers caused the loss of knowledge of the greatest night. It is a reminder that unity and brotherhood are prerequisites for divine blessing.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">11 AH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">The Prophet's Final Ramadan</div>
+          <p class="history-text">In his final Ramadan (11 AH), the Prophet ﷺ performed I'tikaf for 20 nights instead of the usual 10. Scholars interpret this as a sign that he knew it was his last Ramadan and wanted to make it exceptional. Jibreel (AS) reviewed the entire Quran with him twice that year. He passed away in Safar of 11 AH, just months later. His last Ramadan was a model of intensity, generosity, and complete devotion that the companions would speak of for the rest of their lives.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">11–40 AH</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">The Companions' Devotion</div>
+          <p class="history-text">The Sahabah (companions) carried the tradition of the last 10 nights with great zeal. Umar ibn al-Khattab (RA) would perform I'tikaf and stay up until Fajr during these nights. Ali ibn Abi Talib (RA) was known to sleep during the day so he could worship all night. Ibn Masud (RA) said: "I don't think the night of power is hidden from anyone who truly seeks it." Aisha (RA) continued the Prophet's I'tikaf for decades after his passing, establishing it as an unbroken Sunnah.</p>
+        </div>
+      </div>
+
+      <div class="history-item">
+        <div class="history-date">Ongoing</div>
+        <div class="history-line"><div class="history-dot"></div></div>
+        <div class="history-content">
+          <div class="history-title">1400+ Years of Seeking</div>
+          <p class="history-text">For over fourteen centuries, billions of Muslims have sought Laylat ul-Qadr every Ramadan. Mosques overflow with worshippers on odd nights. Tears are shed in the depths of the night. Duas are whispered for family, for the ummah, for forgiveness. The tradition is unbroken. No other religious observance on earth is as widely practiced in a single night as this — and it will continue until the end of time, or until Ramadan is finally taken away as a sign of the Day of Judgment.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- SIGNS -->
+<section id="signs">
+  <div class="section-inner">
+    <div class="section-label">Signs of the Night</div>
+    <h2 class="section-title">How to <em>Recognize</em> Laylat ul-Qadr</h2>
+    <p class="section-desc">The Prophet ﷺ and his companions described signs that may indicate when Laylat ul-Qadr has passed or arrived. Use these as motivation, not certainty.</p>
+
+    <div class="signs-grid">
+      <div class="sign-card reveal">
+        <div class="sign-icon">🌙</div>
+        <div class="sign-title">Calm, Mild Night</div>
+        <p class="sign-text">The night will be calm, neither excessively hot nor cold. A peaceful, temperate night with a sense of stillness and serenity in the atmosphere.</p>
+        <div class="sign-source">Musnad Ahmad · Ibn Khuzaimah</div>
+      </div>
+      <div class="sign-card reveal" style="transition-delay:0.1s">
+        <div class="sign-icon">☀️</div>
+        <div class="sign-title">Sun Rises Without Rays</div>
+        <p class="sign-text">The morning after Laylat ul-Qadr, the sun rises white and radiant without its usual blazing rays — appearing like a full moon rather than a burning disc.</p>
+        <div class="sign-source">Sahih Muslim · Ahmad</div>
+      </div>
+      <div class="sign-card reveal" style="transition-delay:0.2s">
+        <div class="sign-icon">💧</div>
+        <div class="sign-title">Rain May Fall</div>
+        <p class="sign-text">Some narrations mention that it may rain on or around Laylat ul-Qadr. The earth receiving divine mercy and water is consistent with a night of immense barakah.</p>
+        <div class="sign-source">Musannaf Ibn Abi Shaybah</div>
+      </div>
+      <div class="sign-card reveal" style="transition-delay:0.3s">
+        <div class="sign-icon">✨</div>
+        <div class="sign-title">Inner Peace in Worship</div>
+        <p class="sign-text">Many believers report an unusual sweetness in prayer, ease in weeping, and a profound sense of connection with Allah that they have rarely experienced — as if the heart is unusually open.</p>
+        <div class="sign-source">Scholar consensus · Lived experience</div>
+      </div>
+      <div class="sign-card reveal" style="transition-delay:0.4s">
+        <div class="sign-icon">🌟</div>
+        <div class="sign-title">Sky Is Clear & Luminous</div>
+        <p class="sign-text">Some narrations indicate the sky appears unusually bright and clear on this night. The moon appears without haze, and stars seem particularly vivid and still.</p>
+        <div class="sign-source">Ibn Khuzaimah #2049</div>
+      </div>
+      <div class="sign-card reveal" style="transition-delay:0.5s">
+        <div class="sign-icon">🕌</div>
+        <div class="sign-title">Masses Drawn to Worship</div>
+        <p class="sign-text">Scholars note that on Laylat ul-Qadr, Allah draws the hearts of believers toward the mosque and toward prayer. An unusual number of people feel compelled to worship that night.</p>
+        <div class="sign-source">Ibn Rajab al-Hanbali · Lata'if al-Ma'arif</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- IBADAH GUIDE -->
+<section id="ibadah">
+  <div class="section-inner">
+    <div class="section-label">Worship Guide</div>
+    <h2 class="section-title">What to Do <em>Each Night</em></h2>
+    <p class="section-desc">A comprehensive guide to the acts of worship recommended for the last 10 nights, organized by category.</p>
+
+    <div class="ibadah-tabs">
+      <button class="ibadah-tab active" onclick="switchTab('salah')">Salah</button>
+      <button class="ibadah-tab" onclick="switchTab('quran')">Quran</button>
+      <button class="ibadah-tab" onclick="switchTab('dhikr')">Dhikr</button>
+      <button class="ibadah-tab" onclick="switchTab('sadaqah')">Sadaqah</button>
+      <button class="ibadah-tab" onclick="switchTab('itikaf')">I'tikaf</button>
+    </div>
+
+    <div class="ibadah-panel active" id="tab-salah">
+      <div class="ibadah-grid">
+        <div class="ibadah-item"><div class="ibadah-num">1</div><div><div class="ibadah-name">Isha & Taraweeh</div><div class="ibadah-desc">Pray Isha in congregation. Complete all 20 raka'ahs of Taraweeh without skipping. This is your minimum for every night.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">2</div><div><div class="ibadah-name">Tahajjud (Qiyam ul-Layl)</div><div class="ibadah-desc">Pray 2-12 raka'ahs in pairs after midnight and before Fajr. This is the most beloved voluntary prayer to Allah. Recite long surahs slowly.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">3</div><div><div class="ibadah-name">Witr with Qunoot</div><div class="ibadah-desc">End every night with Witr prayer (1 or 3 raka'ahs). In the final raka'ah, raise your hands in Qunoot dua and pour out your heart.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">4</div><div><div class="ibadah-name">Salat ul-Tasbeeh</div><div class="ibadah-desc">The Prophet ﷺ taught this 4-raka'ah prayer with 300 tasbeehat. Especially recommended for seeking forgiveness of all sins.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">5</div><div><div class="ibadah-name">Salat ul-Hajat</div><div class="ibadah-desc">2 raka'ahs for a specific need or request. Pray, then make your dua. The Prophet ﷺ said whoever has a need should perform wudu and pray 2 raka'ahs.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">6</div><div><div class="ibadah-name">Fajr in Congregation</div><div class="ibadah-desc">The Prophet ﷺ said: "Whoever prays Isha in congregation, it is as if he stood in prayer for half the night. Whoever prays Fajr in congregation, it is as if he stood the whole night." Do both — every night.</div></div></div>
+      </div>
+    </div>
+
+    <div class="ibadah-panel" id="tab-quran">
+      <div class="ibadah-grid">
+        <div class="ibadah-item"><div class="ibadah-num">1</div><div><div class="ibadah-name">Recitation with Tajweed</div><div class="ibadah-desc">Recite with proper tajweed and a heart present. "Those to whom We gave the Book recite it as it deserves to be recited." (2:121)</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">2</div><div><div class="ibadah-name">Tadabbur — Deep Reflection</div><div class="ibadah-desc">Do not just race through pages. Pause at ayahs that move you. Ask: what does this mean for my life right now? This is the Quran's purpose.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">3</div><div><div class="ibadah-name">Complete Khatam</div><div class="ibadah-desc">Aim to complete a full Quran recitation in the 10 nights — approximately 6 pages per hour. Even if you don't finish, the intention and effort are rewarded.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">4</div><div><div class="ibadah-name">Study Tafsir</div><div class="ibadah-desc">Read the explanation of key surahs. Recommended: Tafsir Ibn Kathir (available free online). Even 30 mins of tafsir per night transforms your relationship with the Quran.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">5</div><div><div class="ibadah-name">Memorization</div><div class="ibadah-desc">Pick one ayah per night and commit it to memory. By the end of 10 nights you'll have 10 new ayahs. Hafiz level: review your entire hifdh.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">6</div><div><div class="ibadah-name">Listen to Recitation</div><div class="ibadah-desc">While preparing suhoor or during rest, listen to qaris like Sheikh Sudais, Sheikh Mishary, or Shaykh Abdul Basit. The Quran enters the heart through the ears too.</div></div></div>
+      </div>
+    </div>
+
+    <div class="ibadah-panel" id="tab-dhikr">
+      <div class="ibadah-grid">
+        <div class="ibadah-item"><div class="ibadah-num">1</div><div><div class="ibadah-name">Istighfar (Forgiveness)</div><div class="ibadah-desc">"Astaghfirullah" — minimum 100 times daily. The Prophet ﷺ sought forgiveness 70–100 times every day despite being sinless. How much more do we need it?</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">2</div><div><div class="ibadah-name">Laylat ul-Qadr Dua</div><div class="ibadah-desc">"Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni" — Repeat thousands of times on every odd night. This was the specific dua taught by the Prophet ﷺ.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">3</div><div><div class="ibadah-name">Subhanallah, Alhamdulillah, Allahu Akbar</div><div class="ibadah-desc">These three are "the most beloved words to Allah." The Prophet ﷺ said they are heavier on the scale than everything between heaven and earth.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">4</div><div><div class="ibadah-name">Salawat on the Prophet ﷺ</div><div class="ibadah-desc">"Allahumma salli 'ala Muhammad" — 100x minimum. "Whoever sends salawat on me once, Allah sends salawat on him ten times." (Muslim)</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">5</div><div><div class="ibadah-name">La ilaha illallah</div><div class="ibadah-desc">The greatest dhikr. "The best of remembrance is La ilaha illallah." (Tirmidhi) Fill the silences of your night with this declaration of monotheism.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">6</div><div><div class="ibadah-name">Personal Dua List</div><div class="ibadah-desc">Write a comprehensive dua list: dunya needs, akhirah goals, family, ummah, specific forgiveness requests. Be specific. Allah loves detailed, heartfelt requests from His servants.</div></div></div>
+      </div>
+    </div>
+
+    <div class="ibadah-panel" id="tab-sadaqah">
+      <div class="ibadah-grid">
+        <div class="ibadah-item"><div class="ibadah-num">1</div><div><div class="ibadah-name">Zakat ul-Fitr</div><div class="ibadah-desc">Obligatory on every Muslim before Eid prayer. Equivalent to ~2.5kg of staple food per person in your household. Pay it early in the last 10 nights, not last minute.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">2</div><div><div class="ibadah-name">Ongoing Sadaqah</div><div class="ibadah-desc">"Sadaqah extinguishes sin as water extinguishes fire." (Tirmidhi) Give something every single night of the 10 — even a small amount. Consistency matters.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">3</div><div><div class="ibadah-name">Sponsor an Orphan</div><div class="ibadah-desc">The Prophet ﷺ said: "I and the sponsor of an orphan will be in Paradise like this" — and he joined his index and middle fingers. Set up a monthly sponsorship this Ramadan.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">4</div><div><div class="ibadah-name">Feed People</div><div class="ibadah-desc">"Whoever feeds a fasting person will have a reward like theirs." Cook extra and share with neighbors, distribute iftar packs, or donate to food programs.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">5</div><div><div class="ibadah-name">Secret Charity</div><div class="ibadah-desc">Give where only Allah knows. "The right hand gives so secretly that the left hand does not know." (Bukhari) This type of charity is among the 7 shaded under Allah's throne on Judgment Day.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">6</div><div><div class="ibadah-name">Sadaqah Jariyah</div><div class="ibadah-desc">Invest in ongoing charity: contribute to building a mosque, a water well, an Islamic school, or fund a Quran printing. The rewards continue flowing after Ramadan ends and after you die.</div></div></div>
+      </div>
+    </div>
+
+    <div class="ibadah-panel" id="tab-itikaf">
+      <div class="ibadah-grid">
+        <div class="ibadah-item"><div class="ibadah-num">1</div><div><div class="ibadah-name">What Is I'tikaf?</div><div class="ibadah-desc">Spiritual seclusion in the mosque, cutting off from worldly affairs to focus entirely on Allah. The Prophet ﷺ never abandoned it after beginning this practice.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">2</div><div><div class="ibadah-name">Duration & Status</div><div class="ibadah-desc">Full I'tikaf: 10 days and nights in the mosque. Sunnah Mu'akkadah — if no one in the community performs it, all are considered negligent (fard kifayah).</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">3</div><div><div class="ibadah-name">Rules of I'tikaf</div><div class="ibadah-desc">Do not leave the mosque except for necessities (bathroom, wudu). No sexual relations. No unnecessary worldly talk. Focus only on: Salah, Quran, Dhikr, Dua, Islamic learning.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">4</div><div><div class="ibadah-name">Virtual / Partial I'tikaf</div><div class="ibadah-desc">If full I'tikaf is not possible, minimize screen time, reduce conversation, limit social media, and mentally "retreat" during the last 10 nights. Make your home a sanctuary of worship.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">5</div><div><div class="ibadah-name">Wisdom of I'tikaf</div><div class="ibadah-desc">Ibn al-Qayyim wrote that I'tikaf is for the heart what retreating to a mountain is for the body — it removes noise, creates space, and allows the soul to find its center in Allah alone.</div></div></div>
+        <div class="ibadah-item"><div class="ibadah-num">6</div><div><div class="ibadah-name">The Women's I'tikaf</div><div class="ibadah-desc">Aisha (RA) and other wives of the Prophet ﷺ performed I'tikaf. It is permissible for women in a safe, designated area of the mosque, or with the permission of their guardian.</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"><div class="divider-ornament">✦</div></div>
+
+<!-- DUAS -->
+<section id="duas">
+  <div class="section-inner">
+    <div class="section-label">Sacred Supplications</div>
+    <h2 class="section-title">Essential <em>Duas</em> for the Last 10 Nights</h2>
+    <p class="section-desc">These are the most important supplications to make during the blessed nights. Memorize them. Repeat them with presence of heart.</p>
+
+    <div class="dua-list">
+      <div class="dua-card reveal">
+        <div class="dua-arabic">اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي</div>
+        <div class="dua-translit">Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'annee</div>
+        <p class="dua-meaning">O Allah, You are Pardoning and You love to pardon, so pardon me.</p>
+        <div class="dua-occasion">The Laylat ul-Qadr Dua · Taught by the Prophet ﷺ</div>
+      </div>
+
+      <div class="dua-card reveal">
+        <div class="dua-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ</div>
+        <div class="dua-translit">Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar</div>
+        <p class="dua-meaning">Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.</p>
+        <div class="dua-occasion">Quran 2:201 · The Most Comprehensive Dua</div>
+      </div>
+
+      <div class="dua-card reveal">
+        <div class="dua-arabic">اللَّهُمَّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ</div>
+        <div class="dua-translit">Allahummaghfir lee wa-liwaalidayya wa lil-mu'mineena yawma yaqoomul-hisaab</div>
+        <p class="dua-meaning">O Allah, forgive me and my parents and the believers on the Day when the account is established.</p>
+        <div class="dua-occasion">Quran 14:41 · For Yourself & Family</div>
+      </div>
+
+      <div class="dua-card reveal">
+        <div class="dua-arabic">يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ</div>
+        <div class="dua-translit">Ya Muqallibal quloob, thabbit qalbee 'alaa deenik</div>
+        <p class="dua-meaning">O Turner of hearts, make my heart firm upon Your religion.</p>
+        <div class="dua-occasion">Hadith – Tirmidhi · For Steadfastness in Faith</div>
+      </div>
+
+      <div class="dua-card reveal">
+        <div class="dua-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ</div>
+        <div class="dua-translit">Allahumma innee as'alukal-jannata wa a'oodhu bika minan-naar</div>
+        <p class="dua-meaning">O Allah, I ask You for Paradise and I seek refuge in You from the Fire.</p>
+        <div class="dua-occasion">Hadith – Abu Dawud · The Essential Request</div>
+      </div>
+
+      <div class="dua-card reveal">
+        <div class="dua-arabic">اللَّهُمَّ تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ</div>
+        <div class="dua-translit">Allahumma taqabbal minnaa innaka Antas-Samee'ul-'Aleem</div>
+        <p class="dua-meaning">O Allah, accept from us. Indeed, You are the All-Hearing, the All-Knowing.</p>
+        <div class="dua-occasion">Quran 2:127 · The Acceptance Dua — For End of Each Night</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="position:relative;z-index:1;">
+    <div class="footer-arabic">رَمَضَانُ مُبَارَكٌ</div>
+    <p class="footer-text">May Allah accept your fasting, your prayers, and your duas.<br>May He grant you Laylat ul-Qadr and write you among the forgiven.</p>
+    <div class="footer-links">
+      <a href="#home">↑ Top</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#qadr">Laylat ul-Qadr</a>
+      <a href="#hadiths">Hadiths</a>
+      <a href="#history">History</a>
+      <a href="#duas">Duas</a>
+    </div>
+    <div class="footer-bottom">
+      "And those who strive for Us — We will surely guide them to Our ways." — Quran 29:69
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// Stars
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function createStars() {
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      o: Math.random(),
+      speed: Math.random() * 0.003 + 0.001,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    const o = s.o * (0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,245,220,${o})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(ts => drawStars(ts / 1000));
+}
+resizeCanvas(); createStars();
+drawStars(0);
+window.addEventListener('resize', () => { resizeCanvas(); createStars(); });
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(r => obs.observe(r));
+
+// Tabs
+function switchTab(id) {
+  document.querySelectorAll('.ibadah-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ibadah-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
